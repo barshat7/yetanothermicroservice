@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package service;
+
+service OrderService {
+    rpc createOrder(OrderRequest) returns (OrderID);
+    rpc retrieveOrder(OrderID) returns (Order);
+    rpc retrieveOrdersByUserID(UserID) returns (stream Order);
+}
+
+message Order {
+    string userID = 1;
+    string orderDate = 2;
+    double totalPrice = 3;
+}
+
+message OrderRequest {
+
+    string userID = 1;
+    repeated string itemIDList = 2;
+    string orderDate = 3;
+    double totalPrice = 4;
+}
+
+message OrderID {
+    string value = 1;
+}
+
+message UserID {
+    string value = 1;
+}
