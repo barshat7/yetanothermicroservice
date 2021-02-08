@@ -1,6 +1,10 @@
 package com.foodie;
 
+import com.foodie.cartsvc.CartServiceClient;
+import com.foodie.dto.CartDto;
+import com.foodie.dto.CartItemDto;
 import com.foodie.ordersvc.OrderServiceClient;
+import java.util.Arrays;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -16,15 +20,18 @@ public class FoodieApiApplication {
   }
 
   @Bean
-  CommandLineRunner run(OrderServiceClient client) {
+  CommandLineRunner run(OrderServiceClient client, CartServiceClient cartServiceClient) {
     return args -> {
-      //client.createOrder("barshatrai", "1011D", 101.0f);
-      //var order = client.retrieveOrder(1L);
-      //log.info(order.toString());
-      var orderDtos = client.retrieveOrdersByUserID("barshatrai");
-      for (var o : orderDtos) {
-        log.info(o.toString());
-      }
+      // client.createOrder("barshatrai", "1011D", 101.0f);
+      // var order = client.retrieveOrder(1L);
+      // log.info(order.toString());
+      CartItemDto dto1 = new CartItemDto(12L, "Stationeries", 900.00);
+      CartItemDto dto2 = new CartItemDto(17L, "Cosmetics", 1200.00);
+      CartItemDto dto3 = new CartItemDto(14L, "Electronics", 900.00);
+      CartDto cartDto = new CartDto();
+      cartDto.setUserID("reyo99");
+      cartDto.setCartItemDtoList( Arrays.asList(dto1, dto2, dto3));
+      cartServiceClient.createCart(cartDto);
     };
   }
 }

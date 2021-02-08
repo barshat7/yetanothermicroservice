@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package cartgrpc;
+
+
+service CartService {
+    rpc createCart(CreateCartRequest) returns (CartID);
+}
+
+message CreateCartRequest {
+
+    string userID = 1;
+    repeated CartItemRequest cartItems = 2;
+}
+
+message CartItemRequest {
+
+    int64 itemID = 1;
+    string itemName = 2;
+    double itemPrice = 3;
+}
+
+message CartID {
+    int64 value = 1;
+}
+
