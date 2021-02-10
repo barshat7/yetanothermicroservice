@@ -59,6 +59,16 @@ func FindActiveCartOfUser(userID string) *Cart {
 	return nil
 }
 
+func AddItemsToCartForUser(userID string, items [] i.Item) (cartID int64) {
+	activeCart := FindActiveCartOfUser(userID)
+	cartID = activeCart.ID
+	for _, item := range items {
+		item.CartID = cartID
+		item.Save()
+	}
+	return cartID
+}
+
 func (c *Cart) deactivateCarts() {
 	stmt, err := d.Db.Prepare(deactivateUserCarts)
 	if err != nil {

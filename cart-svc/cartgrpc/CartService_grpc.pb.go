@@ -18,6 +18,8 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type CartServiceClient interface {
 	CreateCart(ctx context.Context, in *CreateCartRequest, opts ...grpc.CallOption) (*CartID, error)
+	RetrieveCartByUserID(ctx context.Context, in *UserID, opts ...grpc.CallOption) (*CartResponse, error)
+	AddItemToCart(ctx context.Context, in *AddCartItemRequest, opts ...grpc.CallOption) (*CartID, error)
 }
 
 type cartServiceClient struct {
@@ -37,12 +39,32 @@ func (c *cartServiceClient) CreateCart(ctx context.Context, in *CreateCartReques
 	return out, nil
 }
 
+func (c *cartServiceClient) RetrieveCartByUserID(ctx context.Context, in *UserID, opts ...grpc.CallOption) (*CartResponse, error) {
+	out := new(CartResponse)
+	err := c.cc.Invoke(ctx, "/cartgrpc.CartService/retrieveCartByUserID", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *cartServiceClient) AddItemToCart(ctx context.Context, in *AddCartItemRequest, opts ...grpc.CallOption) (*CartID, error) {
+	out := new(CartID)
+	err := c.cc.Invoke(ctx, "/cartgrpc.CartService/addItemToCart", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // CartServiceServer is the server API for CartService service.
 // All implementations must embed UnimplementedCartServiceServer
 // for forward compatibility
 type CartServiceServer interface {
 	CreateCart(context.Context, *CreateCartRequest) (*CartID, error)
-	//mustEmbedUnimplementedCartServiceServer()
+	RetrieveCartByUserID(context.Context, *UserID) (*CartResponse, error)
+	AddItemToCart(context.Context, *AddCartItemRequest) (*CartID, error)
+	mustEmbedUnimplementedCartServiceServer()
 }
 
 // UnimplementedCartServiceServer must be embedded to have forward compatible implementations.
@@ -51,6 +73,12 @@ type UnimplementedCartServiceServer struct {
 
 func (UnimplementedCartServiceServer) CreateCart(context.Context, *CreateCartRequest) (*CartID, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateCart not implemented")
+}
+func (UnimplementedCartServiceServer) RetrieveCartByUserID(context.Context, *UserID) (*CartResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RetrieveCartByUserID not implemented")
+}
+func (UnimplementedCartServiceServer) AddItemToCart(context.Context, *AddCartItemRequest) (*CartID, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddItemToCart not implemented")
 }
 func (UnimplementedCartServiceServer) mustEmbedUnimplementedCartServiceServer() {}
 
@@ -83,6 +111,42 @@ func _CartService_CreateCart_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _CartService_RetrieveCartByUserID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UserID)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CartServiceServer).RetrieveCartByUserID(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/cartgrpc.CartService/retrieveCartByUserID",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CartServiceServer).RetrieveCartByUserID(ctx, req.(*UserID))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CartService_AddItemToCart_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddCartItemRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CartServiceServer).AddItemToCart(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/cartgrpc.CartService/addItemToCart",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CartServiceServer).AddItemToCart(ctx, req.(*AddCartItemRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _CartService_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "cartgrpc.CartService",
 	HandlerType: (*CartServiceServer)(nil),
@@ -90,6 +154,14 @@ var _CartService_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "createCart",
 			Handler:    _CartService_CreateCart_Handler,
+		},
+		{
+			MethodName: "retrieveCartByUserID",
+			Handler:    _CartService_RetrieveCartByUserID_Handler,
+		},
+		{
+			MethodName: "addItemToCart",
+			Handler:    _CartService_AddItemToCart_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

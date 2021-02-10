@@ -5,6 +5,8 @@ package cartgrpc;
 
 service CartService {
     rpc createCart(CreateCartRequest) returns (CartID);
+    rpc retrieveCartByUserID(UserID) returns (CartResponse);
+    rpc addItemToCart(AddCartItemRequest) returns (CartID);
 }
 
 message CreateCartRequest {
@@ -13,14 +15,40 @@ message CreateCartRequest {
     repeated CartItemRequest cartItems = 2;
 }
 
+message CartResponse {
+    int64 id = 1;
+    string userID = 2;
+    string createdDate = 3;
+    repeated CartItemResponse cartItems = 4;
+}
+
 message CartItemRequest {
 
     int64 itemID = 1;
     string itemName = 2;
     double itemPrice = 3;
+    int64 quantity = 4;
 }
+
+message CartItemResponse {
+    int64 id = 1;
+    int64 cartID = 2;
+    int64 itemID = 3;
+    string itemName = 4;
+    double itemPrice = 5;
+    int64 quantity = 6;
+}
+
 
 message CartID {
     int64 value = 1;
 }
 
+message UserID {
+    string value = 1;
+}
+
+message AddCartItemRequest {
+    string userID = 1;
+    repeated CartItemRequest cartItems = 2;
+}

@@ -25,13 +25,14 @@ public class FoodieApiApplication {
       // client.createOrder("barshatrai", "1011D", 101.0f);
       // var order = client.retrieveOrder(1L);
       // log.info(order.toString());
-      CartItemDto dto1 = new CartItemDto(12L, "Stationeries", 900.00);
-      CartItemDto dto2 = new CartItemDto(17L, "Cosmetics", 1200.00);
-      CartItemDto dto3 = new CartItemDto(14L, "Electronics", 900.00);
-      CartDto cartDto = new CartDto();
-      cartDto.setUserID("reyo99");
-      cartDto.setCartItemDtoList( Arrays.asList(dto1, dto2, dto3));
-      cartServiceClient.createCart(cartDto);
+      CartItemDto dto1 = new CartItemDto(12L, "Bedsheets", 900.00, 10);
+      CartItemDto dto2 = new CartItemDto(17L, "Smartphone", 1200.00, 10);
+      CartItemDto dto3 = new CartItemDto(14L, "Groceries", 900.00, 10);
+    //  CartDto cartDto = new CartDto();
+//      cartDto.setUserID("reyo999");
+//      cartDto.setCartItemDtoList( Arrays.asList(dto1, dto2, dto3));
+      cartServiceClient.addItemsToCart("reyo999", Arrays.asList(dto1, dto2, dto3));
+      //cartServiceClient.retrieveCartByUserID("reyo99");
     };
   }
 }

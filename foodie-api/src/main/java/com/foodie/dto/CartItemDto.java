@@ -1,7 +1,6 @@
 package com.foodie.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -15,4 +14,6 @@ public class CartItemDto {
   private String itemName;
 
   private Double itemPrice;
+
+  private int quantity;
 }
