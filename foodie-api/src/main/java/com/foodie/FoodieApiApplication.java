@@ -31,7 +31,7 @@ public class FoodieApiApplication {
     //  CartDto cartDto = new CartDto();
 //      cartDto.setUserID("reyo999");
 //      cartDto.setCartItemDtoList( Arrays.asList(dto1, dto2, dto3));
-      cartServiceClient.addItemsToCart("reyo999", Arrays.asList(dto1, dto2, dto3));
+      //cartServiceClient.addItemsToCart("reyo999", Arrays.asList(dto1, dto2, dto3));
       //cartServiceClient.retrieveCartByUserID("reyo99");
     };
   }
